@@ -71,7 +71,7 @@ class Q_ueryBuild
     if (!file_exists("ready.x")) {
       $this->db = new PDO($this->dsn0, base64_decode($this->user), base64_decode($this->pwd));
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $sql = file_get_contents('sql.sql');
+      $sql = file_get_contents('classes/sql.sql');
       $this->db->exec($sql);
       $fil = fopen("ready.x", 'w');
       fwrite($fil, $this->db->errorcode());

@@ -1,4 +1,8 @@
-Require mod_rewrite
+
+
+## Setup
+** NB!! setup based on ubuntu 16.04 server **
+### Apache2 mod_rewrite
 
  ** Enable mod_rewrite **
 `sudo a2enmod rewrite`
@@ -20,13 +24,34 @@ Require mod_rewrite
         Require all granted
     </Directory>
 
-** edit /path/to/webapp/.htaccess **
+** create or edit /path/to/webapp/.htaccess **
 
     Options -MultiViews
     RewriteEngine On
 
-    RewriteBase /mvc/
+    RewriteBase /webapp/
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
 
     RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+
+### SQL
+
+Add MySQL script to any folder you desire of the with in your webapp folder. 
+
+edit the file `classes\Q_ueryBuild.php` 
+
+in the function `init()` 
+
+    ...
+    $sql = file_get_contents('relative/path/to/sql.sql');
+    ...
+
+
+
+## Working With Requests
+
+### Example > add_article : 
+>Designed for Multipart File Upload 
+(** Requires read/write permissions For user:group `www-data:www-data`  write file data to folder **)
+

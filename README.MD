@@ -11,7 +11,7 @@
 
 
     <ifModule mod_rewrite.c>
-        Load
+        LoadModule rewrite_module modules/mod_rewrite.so
     </ifModule>
 
 
@@ -39,9 +39,9 @@
 
 Add MySQL script to any folder you desire of the with in your webapp folder. 
 
-edit the file `classes\Q_ueryBuild.php` 
+edit the file **`classes\Q_ueryBuild.php`** 
 
-in the function `init()` 
+in the function **`init()`** 
 
     ...
     $sql = file_get_contents('relative/path/to/sql.sql');
@@ -52,6 +52,28 @@ in the function `init()`
 ## Working With Requests
 
 ### Example > add_article : 
+(** Requires read/write permissions For user:group **|`www-data:www-data`|** write file data to folder **)
 >Designed for Multipart File Upload 
-(** Requires read/write permissions For user:group `www-data:www-data`  write file data to folder **)
 
+
+>> POST vars for files
+**(executes when exp < chksum)**
+>>> `image_1` => file name;
+
+>>> `ext` => file extension;
+
+>>> `exp` => part-number of file expected;
+
+>>> `chcksm` => total number parts expected(+ 1);
+
+>>> `data` => file data expected as base64;
+
+>> POST vars for article
+**(saves to database)**
+>>> `image_2` => description;
+
+>>> `title` => ;
+
+>>> `main` => ;
+
+>>> `creator` => ;

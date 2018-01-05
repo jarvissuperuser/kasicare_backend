@@ -1,6 +1,9 @@
 <?php
  class Survey extends Controller {
     public $tbls;
+    /***
+     * @param 
+     */
     public function __construct($db) {
         $this->db =$db;
         $this->cols = ["title","description","ulist_id"];
@@ -12,24 +15,29 @@
             ["surv_question_id","option"],
             ["surv_id","response","ulist_id"]];
     }
-    public function set($pointer){
+    public function set(){
+        $db = $this->db;
         switch (filter_input(INPUT_POST,"detail")) {
             case "question":
-                $tbl = $this->tbls[1];
-                $cols = $this->scols[1];
+                $opt = 1;
                 break;
             case "option":
-                $tbl = $this->tbls[2];
-                $cols = $this->scols[2];
+                $opt = 2;
                 break;
-            case "question":
-                $tbl = $this->tbls[3];
-                $cols = $this->scols[3];
+            case "answer":
+                $opt = 3
                 break;
 
             default:
                 break;
         }
+        $tbl = $this->tbls[$opt];
+        $cols = $this->scols[$opt];
+        $vals = $this->valuate([],$cols);
+        $qry = $db->insert($tbl,$cols,$vals);
+        $stmt = $db->transaction($qry);
+        $stmt->execute();
+        return json_encode(["msg"=> $qry, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
     }
     public function add() {
         

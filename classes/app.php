@@ -85,7 +85,7 @@ class App{
                 $qry1 = Q_ueryBuild::insert("newsroom.articles", $cols,$vals);
                 $stmt = $db->transaction($qry1);
                 $stmt->execute();
-                return json_encode(["msg"=>$msg . $qry1, "why"=>$stmt->errorInfo(),"extra"=>$val]);
+                return json_encode(["msg"=>$msg . $qry1, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
             }
         } catch (Exception $e){
             $data = ["why"=> $e->getMessage(),"error"=>$e->getCode()];

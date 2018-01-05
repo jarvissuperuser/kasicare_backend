@@ -53,7 +53,7 @@ class Controller{
         $qry = $db->update($tbl, $sorted, "id='$pointer'");
         $stmt = $db->transaction($qry);
         $stmt->execute();
-        echo json_encode(["msg"=>$stmt->errorInfo(),
+        return (["msg"=>$stmt->errorInfo(),
                         "why"=>$stmt->errorCode()]);
     }
     public function delete(Type $var = null)

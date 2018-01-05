@@ -15,7 +15,7 @@
             ["surv_question_id","option"],
             ["surv_id","response","ulist_id"]];
     }
-    public function set(){
+    public function set(){//inserts surveys
         $db = $this->db;
         switch (filter_input(INPUT_POST,"detail")) {
             case "question":
@@ -37,7 +37,7 @@
         $qry = $db->insert($tbl,$cols,$vals);
         $stmt = $db->transaction($qry);
         $stmt->execute();
-        return json_encode(["msg"=> $qry, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
+        return (["msg"=> $qry, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
     }
     public function add() {
         

@@ -68,8 +68,8 @@ class App{
             $stmt->execute();
             $p_key = hash("sha256", filter_input(INPUT_POST, "user_passcode",
                                 FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-            $qry2 = $db->insert($tbl[1], ["id","nationality_key","user_passcode"],
-                            [$db->db->lastInsertId(), $p_key]);
+            $qry2 = $db->insert($tbl[1], ["ulist_id","nationality_key","user_passcode","salt_version"],
+                            [$db->db->lastInsertId(),"ZA", $p_key],'1');
             $stmt2 = $db->transaction($qry2);
             $stmt2->execute();
             return json_encode($stmt->errorInfo());

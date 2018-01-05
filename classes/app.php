@@ -20,9 +20,9 @@ class App{
             switch ($p[0]) {
                 case 'api':
                     return $this->process_api();
-                    break;
                 case 'view':
-                    break;
+                    $u = new User($this->db);
+                    return $u->get(filter_input(INPUT_POST,"pntr"));
                 default:
                     # code...
                     break;

@@ -6,7 +6,7 @@ class Controller{
     public $db;
     public function __construct()
     {
-        $list_size = 5;
+        $this->list_size = 5;
     }
     public function set()
     {
@@ -21,7 +21,7 @@ class Controller{
         $db = $this->db;
         $tbl=$this->tbl;
         try {
-            $qry1 = $db->slct("*", $tbl[0]," 1=1 LIMIT $pointer,$this->list_size");
+            $qry1 = $db->slct("*", $tbl," 1=1 LIMIT $pointer,$this->list_size");
             $stmt = $db->transaction($qry1);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -34,7 +34,7 @@ class Controller{
         $db =  $this->db;
         $tbl = $this->tbl;
         $res = [];
-        $qry = $db->slct('*', $tbl[0], "id='$pointer'");
+        $qry = $db->slct('*', $tbl, "id='$pointer'");
         $setup = $db->transaction($qry);
         $setup->execute();
         if ($setup->errorCode() == "0000"){

@@ -1,13 +1,13 @@
 CREATE SCHEMA IF NOT EXISTS `kasicare`;
 
-CREATE TABLE IF NOT EXISTS `kasicare`.`userlist` (
+CREATE TABLE IF NOT EXISTS `kasicare`.`user_list` (
 	`id` integer NOT NULL,
 	`name` VARCHAR(30),
 	`surname` VARCHAR(30),
 	`email` VARCHAR(70),
 	`phone` VARCHAR(15) NOT NULL,
 	`unique_id` VARCHAR(20),
-	`gender` INTEGER NOT NULL,
+	`gender` VARCHAR(1) NOT NULL,
 	PRIMARY KEY (`id`)
 );
 

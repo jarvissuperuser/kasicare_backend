@@ -59,15 +59,16 @@ class App{
     //create
     public function add_user(){
         $db = $this->db;
+        $tbl=["kasicare.user_list","kasicare.user_signatures"];
         try{
-            $cols = ["first_name","middle_name","last_name","nick_name","email"];
+            $cols = ["name","surname","email","phone","unique_id","gender"];
             $vals  = $this->valuate([], $cols);
-            $qry1 = Q_ueryBuild::insert("newsroom.content_creators", $cols, $vals);
+            $qry1 = Q_ueryBuild::insert($tbl[0], $cols, $vals);
             $stmt = $db->transaction($qry1);
             $stmt->execute();
-            $p_key = hash("sha256", filter_input(INPUT_POST, "p_key",
+            $p_key = hash("sha256", filter_input(INPUT_POST, "user_passcode",
                                 FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-            $qry2 = $db->insert("newsroom.security", ["cc_id","p_key"],
+            $qry2 = $db->insert($tbl[1], ["id","nationality_key","user_passcode"],
                             [$db->db->lastInsertId(), $p_key]);
             $stmt2 = $db->transaction($qry2);
             $stmt2->execute();
@@ -77,6 +78,7 @@ class App{
             return json_encode($data);
         }
     }
+    //   not implememted yet
     public  function add_article(){
         $db = $this->db;
         try {
@@ -111,8 +113,9 @@ class App{
     //read
     public function get_users(){
         $db = $this->db;
+        $tbl=["kasicare.user_list","kasicare.user_signatures"];
         try {
-            $qry1 = $db->slct("*", "newsroom.content_creators");
+            $qry1 = $db->slct("*", $tbl[0]);
             $stmt = $db->transaction($qry1);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

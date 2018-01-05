@@ -123,7 +123,7 @@ class App{
             return ['exception'=>$exc->getTraceAsString()];
         }
     }
-    public function get_articles($pointer){
+    public function get_articles($pointer){//ni
         $db = $this->db;
         $res = [];
         $cols = ["title","img_2","id"];
@@ -137,7 +137,7 @@ class App{
             return (["msg"=>$setup->errorInfo()]);
         }
     }
-    public function get_article($pointer)
+    public function get_article($pointer)//ni
     {
         $db =  $this->db;
         $res = [];
@@ -154,8 +154,9 @@ class App{
     public function get_user($pointer)//not implemented
     {
         $db =  $this->db;
+        $tbl=["kasicare.user_list","kasicare.user_signatures"];
         $res = [];
-        $qry = $db->slct('*', "newsroom.content_creators", "id='$pointer'");
+        $qry = $db->slct('*', $tbl[0], "id='$pointer'");
         $setup = $db->transaction($qry);
         $setup->execute();
         if ($setup->errorCode() == "0000"){

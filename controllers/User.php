@@ -25,4 +25,8 @@ class User extends Controller{
             return json_encode($data);
         }
     }
+    public function resetPassword() {
+        $tbl = "";
+        $cols = [];
+    }
 }

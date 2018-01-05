@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `kasicare`.`institution` (
 
 CREATE TABLE IF NOT EXISTS `kasicare`.`access_log` (
 	`id` integer NOT NULL,
-	`client_id` interger NOT NULL,
+	`client_id` integer NOT NULL,
 	`platform` integer NOT NULL,
 	`when` datetime NOT NULL,
 	`med_prof_id` integer NOT NULL,
@@ -44,8 +44,6 @@ CREATE TABLE IF NOT EXISTS `kasicare`.`activity_log` (
 	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `kasicare`.`location_description` (
-);
 
 CREATE TABLE IF NOT EXISTS `kasicare`.`user_details` (
 	`date_of_birth` date,
@@ -132,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `kasicare`.`bookings` (
 	`confirmed` char,
 	`type_` char,
 	`desc` varchar(100),
-	`location_id` id NOT NULL,
+	`location_id` INTEGER NOT NULL,
 	PRIMARY KEY (`id`)
 );
 

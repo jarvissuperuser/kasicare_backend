@@ -3,6 +3,9 @@ class Controller{
     public $tbl;
     public $cols;
     public $list_size;
+    /**
+     * @var Q_ueryBuild 
+     */
     public $db;
     public function __construct()
     {

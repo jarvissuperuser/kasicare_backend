@@ -1,6 +1,7 @@
 <?php
 class User extends Controller{
     public function __construct($db) {
+        parent::__construct();
         $this->db = $db;
         $this->tbl = "kasicare.user_list";
     }

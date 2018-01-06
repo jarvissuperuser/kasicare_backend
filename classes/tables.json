@@ -4,7 +4,6 @@
 "access_log":["id","client_id","platform","when","med_prof_id"],
 "platforms":["id","name"],
 "activity_log":["id","data","when","userlist_id"],
-"location_description":[],
 "user_details":["date_of_birth","id_number","occupation","address","work","ulist_id","id"],
 "user_med_history":["institute","id","date_of_visit","description","title","med_professional_sign","ulist_id","diagnosis"],
 "user_signatures":["id","ulist_id","key_file","nat_id_number","nationality_key","user_passcode","salt_version"],
@@ -17,5 +16,4 @@
 "survey":["id","title","description","ulist_id"],
 "survey_question":["id","question","type_","surv_id"],
 "survey _answers":["id","surv_id","response","ulist_id"],
-"survey_question_options":["id","surv_question_id","option"],
-"Entity1":[]}
+"survey_question_options":["id","surv_question_id","option"]}

@@ -19,19 +19,7 @@
     }
     public function set(){//inserts survey extras
         $db = $this->db;
-        switch (filter_input(INPUT_POST,"detail")) {
-            case "question":
-                $opt = 1;
-                break;
-            case "option":
-                $opt = 2;
-                break;
-            case "answer":
-                $opt = 3;
-                break;
-            default:
-                break;
-        }
+        $opt = $this->switchr();
         $tbl = $this->tbls[$opt];
         $cols = $this->scols[$opt];
         $vals = $this->valuate([],$cols);
@@ -40,7 +28,20 @@
         $stmt->execute();
         return (["msg"=> $qry, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
     }
-    public function add() {//declares a survey
+		private function switchr(){
+			switch (filter_input(INPUT_POST,"detail")) {
+            case "question":
+							return 1;
+            case "option":
+                return 2;
+            case "answer":
+                return 3;
+            default:
+							throw new Exception("Option Not Valid");
+        }
+		}
+
+		public function add() {//declares a survey
         $tbl = $this->tbl;
         $cols = $this->scols[0];
         $vals = $this->valuate([], $cols);

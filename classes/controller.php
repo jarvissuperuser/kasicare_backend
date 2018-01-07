@@ -47,10 +47,10 @@ class Controller{
             return ["msg"=>$setup->errorInfo(),"sql"=>$qry];
         }
     }
-    public function update($pointer,$col = null)
+    public function update($pointer,$t = null,$col = null)
     {
         $db = $this->db;
-        $tbl = $this->tbl;
+        $tbl = $t==null?$this->tbl:$t;
         $cols = $col==null?$this->cols:$col;
         $sorted = valuesToString($cols);
         $qry = $db->update($tbl, $sorted, "id='$pointer'");
@@ -63,7 +63,11 @@ class Controller{
     {
         # code...
     }
-    public function valuate($vals,$cols){
+		private function switchr(){
+			return 0;
+		}
+
+		public function valuate($vals,$cols){
         foreach($cols as $d){
                 array_push($vals,filter_input(INPUT_POST, $d,
                                 FILTER_SANITIZE_FULL_SPECIAL_CHARS));

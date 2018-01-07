@@ -12,14 +12,8 @@ class Institution extends Controller{
     }
     public function set()
     {
-        switch (filter_input(INPUT_POST,"detail")) {
-            case "Instituion":
-                $opt = 0;
-                break;
-            default:
-                throw new Exception("Not an option");
-                break;
-        }
+				$db = $this->db;
+				$opt = $this->switchr();
         $tbl = $this->tbls[$opt];
         $cols = $this->scols[$opt];
         $vals = $this->valuate([],$cols);
@@ -28,7 +22,16 @@ class Institution extends Controller{
         $stmt->execute();
         return (["msg"=> $qry, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
     }
-    public function add(){
+		public function switchr(){
+			switch (filter_input(INPUT_POST,"detail")) {
+            case "Institution":
+                return 0;
+            default:
+                throw new Exception("Not an option");
+        }
+		}
+
+		public function add(){
         $tbl = $this->tbl;
         $cols = $this->cols;
         $vals = $this->valuate([], $cols);

@@ -24,51 +24,107 @@ class App{
                     $u = new User($this->db);
                     return $u->get(filter_input(INPUT_POST,"pntr"));
                 default:
-                    # code...
                     break;
             }
         }
     }
-    public function process_api(){
-        $pointer = filter_input(INPUT_POST,"pntr",
-                FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    public function process_api(){//users
+        $pointer = filter_input(INPUT_POST,"pntr",FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$u = new User($this->db);
         switch (filter_input(INPUT_POST,"submit")) {
             case 'add_user':
-                return $this->add_user();
-            case "get_users":
-                return $this->get_users();
+								return $u->add();
+            case "set_user":
+                return $u->set();
             case "get_user":
-                return $this->get_user($pointer);
-            case "add_article":
-                return $this->add_article();
-            case "get_article":
-                return $this->get_article($pointer);
-            case "get_articles":
-                return $this->get_articles($pointer);
-            case "update":
-                return $this->update($pointer);
-            case "delete":
-                return ["Not Implemented"];// $this->delete($pointer);
-            case "login":
-                return $this->login();   
+                return $u->get($pointer);
+						case "get_users":
+                return $u->get_all($pointer);
+						case "update_user":
+							return $u->update($pointer);
             default:
-                return ["Empty"];
+                return $this->process_survey();
         }
     }
+		public function process_survey($pointer) {
+			$u = new Survey($this->db);
+			switch (filter_input(INPUT_POST,"submit")) {
+            case 'add_survey':
+								return $u->add();
+            case "set_survey":
+                return $u->set();
+            case "get_survey":
+                return $u->get($pointer);
+						case "get_surveys":
+                return $u->get_all($pointer);
+						case "update_survey":
+							return $u->update($pointer);
+            default:
+                return $this->process_institute($pointer);
+        }
+		}
+		public function process_institute($pointer) {
+			$u = new Institution($this->db);
+			switch (filter_input(INPUT_POST,"submit")) {
+            case 'add_institution':
+								return $u->add();
+            case "set_institution":
+                return $u->set();
+            case "get_institution":
+                return $u->get($pointer);
+						case "get_institution":
+                return $u->get_all($pointer);
+						case "update_institution":
+							return $u->update($pointer);
+            default:
+                return $this->process_med_prof($pointer);
+        }
+		}
+		public function process_med_prof($pointer) {
+			$u = new Medical_professional($this->db);
+			switch (filter_input(INPUT_POST,"submit")) {
+            case 'add_prof':
+								return $u->add();
+            case "set_prof":
+                return $u->set();
+            case "get_prof":
+                return $u->get($pointer);
+						case "get_prof":
+                return $u->get_all($pointer);
+						case "update_prof":
+							return $u->update($pointer);
+            default:
+                return $this->process_book($pointer);
+        }
+		}
+		public function process_book($pointer) {
+			$u = new Medical_professional($this->db);
+			switch (filter_input(INPUT_POST,"submit")) {
+            case 'add_booking':
+								return $u->add();
+            case "set_booking":
+                return $u->set();
+            case "get_booking":
+                return $u->get($pointer);
+						case "get_booking":
+                return $u->get_all($pointer);
+						case "update_booking":
+							return $u->update($pointer);
+            default:
+                return ["not a valid option"];
+        }
+		}
+    //c
     //crud plus helpers
     //create
-    public function add_user(){
-        $u = new User($this->db);
-        return $u->add();
-    }
+    
     //   not implememted yet
     public  function add_article(){
         $db = $this->db;
         try {
             $fn = filter_input(INPUT_POST, 'image_1');
             $fe = filter_input(INPUT_POST, 'ext');
-            $file = substr(hash('sha256',
-                            filter_input(INPUT_POST, 'image_1')),0,60) . '.' . $fe;
+            $file = substr(hash('sha256',filter_input(INPUT_POST, 'image_1')),0,60) . '.' . $fe;
             $exp = filter_input(INPUT_POST, "exp");
             $updata = filter_input(INPUT_POST, "data");
             $cs = filter_input(INPUT_POST, "chcksm");
@@ -81,7 +137,7 @@ class App{
                 $cols = ["title","main","creator","image_1","image_2","title_description"];
                 $vals  = $this->valuate([], $cols);
                 $msg .= $file . "<+= " . $fn . " names" ;
-                if ($fn != 'none'){	$vals[3] = $file;}
+                if ($fn != 'none'){	$vals[3] = $file; }
                 $qry1 = Q_ueryBuild::insert("newsroom.articles", $cols,$vals);
                 $stmt = $db->transaction($qry1);
                 $stmt->execute();
@@ -94,82 +150,9 @@ class App{
     }
 
     //read
-    public function get_users(){
-        $db = $this->db;
-        $tbl=["kasicare.user_list","kasicare.user_signatures"];
-        try {
-            $qry1 = $db->slct("*", $tbl[0]);
-            $stmt = $db->transaction($qry1);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $exc) {
-            return ['exception'=>$exc->getTraceAsString()];
-        }
-    }
-    public function get_articles($pointer){//ni
-        $db = $this->db;
-        $res = [];
-        $cols = ["title","img_2","id"];
-        $qry = $db->slct($cols, "newsroom.news", "1=1 limit $pointer,5");
-        $setup = $db->transaction($qry);
-        $setup->execute();
-        if ($setup->errorCode() == "0000"){
-            $res = $setup->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
-        }else{
-            return (["msg"=>$setup->errorInfo()]);
-        }
-    }
-    public function get_article($pointer)//ni
-    {
-        $db =  $this->db;
-        $res = [];
-        $qry = $db->slct('*', "newsroom.news", "id='$pointer'");
-        $setup = $db->transaction($qry);
-        $setup->execute();
-        if ($setup->errorCode() == "0000"){
-            $res = $setup->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
-        }else{
-            return ["msg"=>$setup->errorInfo(),"sql"=>$qry];
-        }
-    }
-    public function get_user($pointer)//not implemented
-    {
-        $db =  $this->db;
-        $tbl=["kasicare.user_list","kasicare.user_signatures"];
-        $res = [];
-        $qry = $db->slct('*', $tbl[0], "id='$pointer'");
-        $setup = $db->transaction($qry);
-        $setup->execute();
-        if ($setup->errorCode() == "0000"){
-            $res = $setup->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
-        }else{
-            return ["msg"=>$setup->errorInfo(),"sql"=>$qry];
-        }
-    }
+   
     //update
-    public function update($user_id)
-    {
-        $db = $this->db;
-        if (strlen(filter_input(INPUT_POST, "email"))>0){
-            $cols = ["first_name","middle_name","last_name","nick_name"];
-            $tbl = "newsroom.content_creators";
-        }else if (strlen(filter_input(INPUT_POST, "article"))>0){
-            $cols = ["title","main","title_description"];
-            $tbl = "newsroom.articles";
-        }else if (strlen(filter_input(INPUT_POST, "aritcle_img"))>0){
-            $cols = ["image_1","image_2"];
-            $tbl = "newsroom.articles";
-        }
-        $sorted = valuesToString($cols);
-        $qry = $db->update($tbl, $sorted, "id='$user_id'");
-        $stmt = $db->transaction($qry);
-        $stmt->execute();
-        echo json_encode(["msg"=>$stmt->errorInfo(),
-                        "why"=>$stmt->errorCode()]);
-    }
+   
     //helper
 
     public function login()

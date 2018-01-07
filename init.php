@@ -1,5 +1,10 @@
 <?php
 require_once "classes/controller.php";
-require_once "controllers/User.php";
+
+$ctrl = ["Bookings","Institution","User","Med_history","Med_prof","Survey"];
+foreach ($ctrl as $take)
+{
+	require_once "./controllers/$take.php";
+}
 require_once "classes/app.php";
 require_once "classes/Q_ueryBuild.php";

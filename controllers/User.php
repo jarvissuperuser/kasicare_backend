@@ -1,9 +1,11 @@
 <?php
 class User extends Controller{
+    public $tbls;
     public function __construct($db) {
         parent::__construct();
         $this->db = $db;
-        $this->tbl = "kasicare.user_list";
+        $this->tbls = ["kasicare.user_list","kasicare.user_signatures"];
+        $this->tbl = $this->tbls[0];
     }
     public function add() {
         $db = $this->db;
@@ -29,5 +31,37 @@ class User extends Controller{
     public function resetPassword() {
         $tbl = "";
         $cols = [];
+    }
+    public function login()
+    {
+        $stmt = $this->user_check();$stmt->execute();
+        if ($stmt->errorCode()=="0000"){
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+            $slt = "count(user_passcode) as password";
+            $table = $this->tbls[1];;//table to query
+            $p_key = hash("sha256",filter_input(INPUT_POST,"p_key",
+                            FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+            $w = "ulist_id='" . $res["id"] . "' and user_passcode='$p_key' ";
+            $qry1 = $db->slct($slt, $table, $w); $stmt1 = $db->transaction($qry1); $stmt1->execute();
+            $r = $stmt1->rowCount();
+            if ($stmt1->errorCode()=="0000"&&$r == 1){
+                return ($res);
+            }else{
+                return (["msg"=>"error","why"=>$stmt1->errorInfo(),
+                        "extra"=>"Possible Password Mismatch 1"]);
+            }
+        }else{
+            return (["msg"=>"error","why"=>$stmt->errorInfo(),
+                        "extra"=>"Possible Password Mismatch 0"]);
+        }
+    }
+    private function user_check(){
+        $db = $this->db;
+        $selection = "*";
+        $tbl = $this->tbl;//table to query
+        $email = filter_input(INPUT_POST,"email",FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $what = "email='$email'";
+        $qry = $db->slct($selection, $tbl, $what);
+        return $db->transaction($qry);
     }
 }

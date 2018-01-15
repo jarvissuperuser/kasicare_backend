@@ -22,10 +22,10 @@ class User extends Controller{
             $p_key = hash("sha256", filter_input(INPUT_POST, "user_passcode",
                                 FILTER_SANITIZE_FULL_SPECIAL_CHARS));
             $qry2 = $db->insert($tbls[1], ["ulist_id","nationality_key","user_passcode","salt_version"],
-                            [$db->db->lastInsertId(),"ZA", $p_key],'1');
+                            [$db->db->lastInsertId(),"ZA", $p_key,'1']);
             $stmt2 = $db->transaction($qry2);
             $stmt2->execute();
-            return json_encode($stmt->errorInfo());
+            return [$stmt->errorInfo(),$qry2];
         } catch (Exception $e){
             $data = ["why"=> $e->getMessage(),"error"=>$e->getCode()];
             return json_encode($data);
@@ -37,8 +37,8 @@ class User extends Controller{
     }
     public function login(){
         $db=$this->db;$stmt = $this->user_check();$stmt->execute();
-        if ($stmt->errorCode()=="0000"){
-            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($stmt->errorCode()=="0000"&&$res['id']>0){
             $slt = "*";
             $table = $this->tbls[1];;//table to query
             $p_key = hash("sha256",filter_input(INPUT_POST,"p_key",
@@ -46,8 +46,8 @@ class User extends Controller{
             $w = "ulist_id='" . $res["id"] . "' and user_passcode='$p_key' ";
             $qry1 = $db->slct($slt, $table, $w); $stmt1 = $db->transaction($qry1); $stmt1->execute();
             $r = $stmt1->rowCount();
-            if ($stmt1->errorCode()=="0000"&&$r == 1){
-                return ($stmt1->fetch());
+            if ($stmt1->errorCode()=="0000"){
+                return ([$stmt->fetch(PDO::FETCH_ASSOC),$qry1]);
             }else{
                 return (["msg"=>"error","why"=>$stmt1->errorInfo(),
                         "extra"=>"Possible Password Mismatch 1"]);

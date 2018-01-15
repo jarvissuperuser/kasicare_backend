@@ -102,7 +102,7 @@ class Q_ueryBuild
     // TODO: implement here
     $res = "";
     if (is_array($obj)) {
-      $res = " {$obj[0]} ";
+      $res = " `{$obj[0]}` ";
       if ($mode == 1){
         $res = "'{$obj[0]}'";
       }
@@ -123,7 +123,7 @@ class Q_ueryBuild
     $len = sizeof($obj);
     if ($obj[1] !== NULL) {
       for ($a = 1; $a < $len; $a++) {
-        $res .= ($mode == 1)?",'{$obj[$a]}'":",{$obj[$a]}";
+        $res .= ($mode == 1)?",'{$obj[$a]}'":",`{$obj[$a]}`";
       }
     }
     return "$res";

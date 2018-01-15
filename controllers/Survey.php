@@ -7,10 +7,11 @@
      */
     public function __construct($db) {
         parent::__construct();
+        $this->list_size = 20;
         $this->db = $db==null?new Q_ueryBuild():$db;
         $this->cols = ["title","description","ulist_id"];
         $this->tbls = ["kasicare.survey","kasicare.survey_question",
-            "kasicare.survey_question_option","kasicare.survey_answers"];
+            "kasicare.survey_question_options","kasicare.survey_answers"];
         $this->tbl = $this->tbls[0];
         $this->scols=[["title","description","ulist_id"],
             ["question","type_","surv_id"],
@@ -26,7 +27,7 @@
         $qry = $db->insert($tbl,$cols,$vals);
         $stmt = $db->transaction($qry);
         $stmt->execute();
-        return (["msg"=> $qry, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
+        return (["msg"=> $db->db->lastInsertId(), "why"=>$stmt->errorInfo(),"extra"=>$vals]);
     }
 		private function switchr(){
 			switch (filter_input(INPUT_POST,"detail")) {
@@ -37,7 +38,9 @@
             case "answer":
                 return 3;
             default:
-							throw new Exception("Option Not Valid");
+                if (filter_input(INPUT_POST,"submit") == "set_survey")
+                            throw new Exception("Option Not Valid");
+                return 0;
         }
 		}
 
@@ -49,7 +52,23 @@
         $qry = $db->insert($tbl, $cols, $vals);
         $stmt = $db->transaction($qry);
         $stmt->execute();
-        return (["msg"=> $qry, "why"=>$stmt->errorInfo(),"extra"=>$vals]);
+        return (["msg"=> $db->db->lastInsertId(), "why"=>$stmt->errorInfo(),"extra"=>$vals]);
+    }
+    public function get($pointer)
+    {
+        $db =  $this->db;
+        $opt = $this->switchr();
+        $tbl = $this->tbls[$opt];
+        $res = [];
+        $qry = $db->slct('*', $tbl, "id='$pointer'");
+        $setup = $db->transaction($qry);
+        $setup->execute();
+        if ($setup->errorCode() == "0000"){
+            $res = $setup->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }else{
+            return ["msg"=>$setup->errorInfo(),"sql"=>$qry];
+        }
     }
 
 }

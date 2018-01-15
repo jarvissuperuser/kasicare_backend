@@ -46,7 +46,7 @@ class App{
             case "sign_in":
                 return $u->login();
             default:
-                return $this->process_survey();
+                return $this->process_survey($pointer);
         }
     }
 		public function process_survey($pointer) {

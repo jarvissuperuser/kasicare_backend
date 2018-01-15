@@ -25,7 +25,7 @@ class User extends Controller{
                             [$db->db->lastInsertId(),"ZA", $p_key,'1']);
             $stmt2 = $db->transaction($qry2);
             $stmt2->execute();
-            return ["data"=>$stmt->errorInfo(),"entry"=>$db->db->lastInsertId()];
+            return ["data"=>$stmt->errorInfo(),"entry"=>$db->db->lastInsertId("ulist_id")];
         } catch (Exception $e){
             $data = ["why"=> $e->getMessage(),"error"=>$e->getCode()];
             return ($data);

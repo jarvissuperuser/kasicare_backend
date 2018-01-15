@@ -52,12 +52,12 @@ class Controller{
         $db = $this->db;
         $tbl = $t==null?$this->tbl:$t;
         $cols = $col==null?$this->cols:$col;
-        $sorted = valuesToString($cols);
+        $sorted = $this->valuesToString($cols);
         $qry = $db->update($tbl, $sorted, "id='$pointer'");
         $stmt = $db->transaction($qry);
         $stmt->execute();
-        return (["msg"=>$stmt->errorInfo(),
-                        "why"=>$stmt->errorCode()]);
+        return (["msg"=>$stmt->errorCode(),
+                        "why"=>$stmt->errorInfo()]);
     }
     public function delete(Type $var = null)
     {

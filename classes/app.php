@@ -40,8 +40,8 @@ class App{
                 return $u->get($pointer);
 			case "get_users":
                 return $u->get_all($pointer);
-						case "update_user":
-                            return $u->update($pointer);
+            case "update_user":
+                return $u->update($pointer);
             case "login":
             case "sign_in":
                 return $u->login();

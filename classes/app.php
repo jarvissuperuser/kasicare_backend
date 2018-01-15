@@ -33,15 +33,18 @@ class App{
 				$u = new User($this->db);
         switch (filter_input(INPUT_POST,"submit")) {
             case 'add_user':
-								return $u->add();
+				return $u->add();
             case "set_user":
                 return $u->set();
             case "get_user":
                 return $u->get($pointer);
-						case "get_users":
+			case "get_users":
                 return $u->get_all($pointer);
 						case "update_user":
-							return $u->update($pointer);
+                            return $u->update($pointer);
+            case "login":
+            case "sign_in":
+                return $u->login();
             default:
                 return $this->process_survey();
         }

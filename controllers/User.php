@@ -15,9 +15,9 @@ class User extends Controller{
         $tbls=["kasicare.user_list","kasicare.user_signatures"];
         try{
             $cols = ["name","surname","email","phone","unique_id","gender"];
-            $vals  = $this->valuate([], $cols);
-            $qry1 = Q_ueryBuild::insert($tbls[0], $cols, $vals);
-            $stmt = $db->transaction($qry1);
+            $vals  = $this->valuate([], $cols);$st=$this->user_check();$st->execute();
+            if ($st->rowCount()>0)throw new Exception("Already Registered");
+            $qry1 = Q_ueryBuild::insert($tbls[0], $cols, $vals);$stmt = $db->transaction($qry1);
             $stmt->execute();
             $p_key = hash("sha256", filter_input(INPUT_POST, "user_passcode",
                                 FILTER_SANITIZE_FULL_SPECIAL_CHARS));
@@ -25,10 +25,10 @@ class User extends Controller{
                             [$db->db->lastInsertId(),"ZA", $p_key,'1']);
             $stmt2 = $db->transaction($qry2);
             $stmt2->execute();
-            return [$stmt->errorInfo(),$qry2];
+            return ["data"=>$stmt->errorInfo(),"entry"=>$stmt->lastInsertId()];
         } catch (Exception $e){
             $data = ["why"=> $e->getMessage(),"error"=>$e->getCode()];
-            return json_encode($data);
+            return ($data);
         }
     }
     public function resetPassword() {
@@ -47,7 +47,7 @@ class User extends Controller{
             $qry1 = $db->slct($slt, $table, $w); $stmt1 = $db->transaction($qry1); $stmt1->execute();
             $r = $stmt1->rowCount();
             if ($stmt1->errorCode()=="0000"){
-                return ([$stmt->fetch(PDO::FETCH_ASSOC),$qry1]);
+                return ($stmt->fetch(PDO::FETCH_ASSOC));
             }else{
                 return (["msg"=>"error","why"=>$stmt1->errorInfo(),
                         "extra"=>"Possible Password Mismatch 1"]);
@@ -62,7 +62,8 @@ class User extends Controller{
         $selection = "*";
         $tbl = $this->tbl;//table to query
         $email = filter_input(INPUT_POST,"email",FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $what = "email='$email'";
+        $phone = filter_input(INPUT_POST,"phone",FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $what = "email='$email' or phone='$phone'";
         $qry = $db->slct($selection, $tbl, $what);
         return $db->transaction($qry);
     }

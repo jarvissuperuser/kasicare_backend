@@ -47,7 +47,7 @@ class User extends Controller{
             $qry1 = $db->slct($slt, $table, $w); $stmt1 = $db->transaction($qry1); $stmt1->execute();
             $r = $stmt1->rowCount();
             if ($stmt1->errorCode()=="0000"){
-                return ([$stmt1->fetch(PDO::FETCH_ASSOC)]);
+                return ([$stmt->fetch(PDO::FETCH_ASSOC)]);
             }else{
                 return (["msg"=>"error","why"=>$stmt1->errorInfo(),
                         "extra"=>"Possible Password Mismatch 1"]);

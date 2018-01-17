@@ -89,9 +89,10 @@ CREATE TABLE IF NOT EXISTS `kasicare`.`medical_professional_list` (
 
 CREATE TABLE IF NOT EXISTS `kasicare`.`medical_specialisation` (
 	`id` integer NOT NULL AUTO_INCREMENT, 
-	`key` varchar(3) NOT NULL,
-	`title` varchar(10) NOT NULL,
-	`description` varchar(150) NOT NULL,
+	`key` varchar(3),
+	`title` varchar(10),
+	`description` varchar(15),
+	`institution_id` integer MOT NULL,
 	PRIMARY KEY (`id`)
 );
 

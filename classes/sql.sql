@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `kasicare`.`medical_specialisation` (
 	`key` varchar(3),
 	`title` varchar(10),
 	`description` varchar(15),
-	`institution_id` integer MOT NULL,
+	`institution_id` integer NOT NULL,
 	PRIMARY KEY (`id`)
 );
 

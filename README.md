@@ -46,9 +46,9 @@ The class **`Q_ueryBuild`** houses the **`PDO`** database connection in the **` 
 
 to set it up run these in the terminal
 
-    $ echo -n "DBuser" | base4
+    $ echo -n "DBuser" | base64
     REJ1c2Vy
-    $ echo -n "DBP@s5w0rd" | base4 
+    $ echo -n "DBP@s5w0rd" | base64 
     REJQQHM1dzByZA==
 
 then take the results setup the **` setdsn() `** function

@@ -7,6 +7,7 @@ class Institution extends Controller
 
     public function __construct($db)
     {
+        parent::__construct();
         $this->db = $db;
         $this->tbls = ["kasicare.institution"];
         $this->tbl = $this->tbls[0];
@@ -26,7 +27,10 @@ class Institution extends Controller
         $stmt->execute();
         return (["msg" => $qry, "why" => $stmt->errorInfo(), "extra" => $vals]);
     }
-
+    /**
+     * @Exception Options
+     * @throws Exception
+    */
     public function switchr()
     {
         switch (Controller::get_var("detail")) {

@@ -33,6 +33,7 @@ class User extends Controller{
                 [$i_d, date("Y-m-d",strtotime(Controller::get_var("date_of_birth")))]);
             $stmt2 = $db->transaction($qry3);
             $stmt2->execute();
+            Controller::sendStatus(201);
             return ["data"=>$stmt->errorInfo(),"entry"=>$i_d,"status"=>"success"];
         } catch (Exception $e){
             $data = ["why"=> $e->getMessage(),"error"=>$e->getCode()];

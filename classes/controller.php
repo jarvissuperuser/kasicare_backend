@@ -4,6 +4,8 @@ class Controller{
     public $cols;
     public $list_size;
     public static $BAD_REQ = 400;
+    public static $CREATED = 201;
+    public static $NO_CONTENT = 204;
     public static $BAD_AUTH = 401;
     public static $NOT_FOUND = 404;
     public static $SERVER_ERROR = 500;
@@ -20,11 +22,11 @@ class Controller{
     }
     public function set()
     {
-        
+        return [];
     }
     public function add()
     {
-
+        return [];
     }
     public function get_all($pointer = 0)
     {
@@ -163,6 +165,14 @@ class Controller{
             case self::$NOT_FOUND:
                 $code = self::$NOT_FOUND;
                 header( "HTTP/1.0 $code NOT FOUND");
+                break;
+            case self::$CREATED:
+                $code = self::$CREATED;
+                header( "HTTP/1.0 $code CREATED");
+                break;
+            case self::$NO_CONTENT:
+                $code = self::$NO_CONTENT;
+                header( "HTTP/1.0 $code NO CONTENT");
                 break;
             case self::$SERVER_ERROR:
                 $code = self::$SERVER_ERROR;

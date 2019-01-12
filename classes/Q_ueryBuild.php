@@ -35,9 +35,9 @@ class Q_ueryBuild
   }
 
   /**
-   * @param void $selection
-   * @param void $table
-   * @param void $what
+   * @param * $selection
+   * @param * $table
+   * @param * $what
    * @return string
    */
   public static function slct($selection, $table, $what) {
@@ -50,9 +50,10 @@ class Q_ueryBuild
   }
 
   /**
-   * @param void $table string
-   * @param void $what string
-   * @param void $id string
+   * @param * $table string
+   * @param * $what string
+   * @param * $id string
+   * @return string
    */
   public static function update($table, $what, $id) {
     // TODO: implement here

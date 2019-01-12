@@ -23,14 +23,14 @@
         $opt = $this->switchr();
         $tbl = $this->tbls[$opt];
         $cols = $this->scols[$opt];
-        $vals = $this->valuate([],$cols);
+        $vals = $this->valuate_s([],$cols,Controller::get_obj(true));
         $qry = $db->insert($tbl,$cols,$vals);
         $stmt = $db->transaction($qry);
         $stmt->execute();
         return (["msg"=> $db->db->lastInsertId(), "why"=>$stmt->errorInfo(),"extra"=>$vals]);
     }
 		private function switchr(){
-			switch (filter_input(INPUT_POST,"detail")) {
+			switch (Controller::get_var("detail")) {
             case "question":
 							return 1;
             case "option":
@@ -38,7 +38,7 @@
             case "answer":
                 return 3;
             default:
-                if (filter_input(INPUT_POST,"submit") == "set_survey")
+                if (Controller::get_var("submit") == "set_survey")
                             throw new Exception("Option Not Valid");
                 return 0;
         }
@@ -47,7 +47,7 @@
 		public function add() {//declares a survey
         $tbl = $this->tbl;
         $cols = $this->scols[0];
-        $vals = $this->valuate([], $cols);
+        $vals = $this->valuate_s([],$cols,Controller::get_obj(true));
         $db = $this->db;
         $qry = $db->insert($tbl, $cols, $vals);
         $stmt = $db->transaction($qry);

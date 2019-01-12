@@ -22,16 +22,16 @@ class Q_ueryBuild
       $this->init();
     } catch (Exception $e) {
       $this->db = null;
-      echo json_encode([$e,$e->getTraceAsString()]);
+      echo json_encode([$e->getMessage(),$e->getTraceAsString()]);
       //error_log($e);
     }
   }
 
-  public function setdsn($con = 'mysql', $url = 'localhost') {
+  public function setdsn($con = 'mysql', $url = '172.17.0.3;port=3306;') {
     $this->user = "cm9vdA=="; //base64 obfuscicated
     $this->pwd = "cm9vdDEyMzQ=";
     $this->dsn0 = "$con:host=$url;";
-    $this->dsn1 = $this->dsn0 . 'name=newsroom;';
+    $this->dsn1 = $this->dsn0 . '';
   }
 
   /**
@@ -82,9 +82,10 @@ class Q_ueryBuild
   }
 
   /**
-   * @param void $tble string
-   * @param void $cols not array...
-   * @param void $vals can be array or string
+   * @param * $tble string
+   * @param * $cols not array...
+   * @param * $vals can be array or string
+   * @return string
    */
   public static function insert($tble, $cols, $vals) {
     // TODO: implement here

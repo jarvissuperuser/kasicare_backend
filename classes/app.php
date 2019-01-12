@@ -30,8 +30,10 @@ class App{
     }
     public function process_api(){//users
         $pointer = filter_input(INPUT_POST,"pntr",FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$u = new User($this->db);
-        switch (filter_input(INPUT_POST,"submit")) {
+        $pointer = $pointer!=""||$pointer!=null?$pointer:Controller::get_obj()->pntr;
+        $u = new User($this->db);
+        $submit = $this->get_submit();
+        switch ($submit) {
             case 'add_user':
 				return $u->add();
             case "set_user":
@@ -51,7 +53,7 @@ class App{
     }
 		public function process_survey($pointer) {
 			$u = new Survey($this->db);
-			switch (filter_input(INPUT_POST,"submit")) {
+			switch ($this->get_submit()) {
             case 'add_survey':
 								return $u->add();
             case "set_survey":
@@ -68,17 +70,17 @@ class App{
 		}
 		public function process_institute($pointer) {
 			$u = new Institution($this->db);
-			switch (filter_input(INPUT_POST,"submit")) {
+			switch ($this->get_submit()) {
             case 'add_institution':
-								return $u->add();
+                return $u->add();
             case "set_institution":
                 return $u->set();
             case "get_institution":
                 return $u->get($pointer);
-						case "get_institution":
+            case "get_institution":
                 return $u->get_all($pointer);
-						case "update_institution":
-							return $u->update($pointer);
+			case "update_institution":
+			    return $u->update($pointer);
             default:
                 return $this->process_med_prof($pointer);
         }
@@ -92,27 +94,27 @@ class App{
                 return $u->set();
             case "get_prof":
                 return $u->get($pointer);
-						case "get_prof":
+            case "get_prof":
                 return $u->get_all($pointer);
-						case "update_prof":
-							return $u->update($pointer);
+            case "update_prof":
+                return $u->update($pointer);
             default:
                 return $this->process_book($pointer);
         }
 		}
 		public function process_book($pointer) {
 			$u = new Medical_professional($this->db);
-			switch (filter_input(INPUT_POST,"submit")) {
+			switch ($this->get_submit()) {
             case 'add_booking':
 								return $u->add();
             case "set_booking":
                 return $u->set();
             case "get_booking":
                 return $u->get($pointer);
-						case "get_booking":
+            case "get_booking":
                 return $u->get_all($pointer);
-						case "update_booking":
-							return $u->update($pointer);
+            case "update_booking":
+                return $u->update($pointer);
             default:
                 return ["not a valid option"];
         }
@@ -138,5 +140,9 @@ class App{
                             FILTER_SANITIZE_FULL_SPECIAL_CHARS)."',";
         }
         return substr($what,0 ,strlen($what)-1);
+    }
+    private function get_submit(){
+        $submit = filter_input(INPUT_POST,"submit");
+       return $submit!=""||$submit!=null?$submit:Controller::get_obj()->submit;
     }
 }
